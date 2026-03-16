@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Jobrelic · Automated Job Application Platform</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="assets/style.css" />
+	</head>
+	<body>
+		<header class="hero shell">
+			<nav class="topbar">
+				<div class="brand">
+					<img src="assets/jobrelic-logo.png" alt="Jobrelic logo" class="brand__logo" />
+					<span>Jobrelic</span>
+				</div>
+				<div class="topbar__links">
+					<a href="#profile">Profile</a>
+					<a href="#swipe">Swipe Jobs</a>
+					<a href="#dashboard">Dashboard</a>
+				</div>
+			</nav>
+
+			<section class="hero__content">
+				<div>
+					<p class="eyebrow">Automated job applications with human control</p>
+					<h1>Turn your profile into a live job-matching engine.</h1>
+					<p class="hero__copy">
+						Parse CVs, match against live openings, auto-apply above 85%, and keep a
+						swipe-first flow for the jobs you want to review yourself.
+					</p>
+					<div class="hero__actions">
+						<a href="#profile" class="button button--primary">Build profile</a>
+						<a href="#dashboard" class="button button--secondary">View dashboard</a>
+					</div>
+				</div>
+				<aside class="hero__panel glass">
+					<p class="hero__panel-label">Platform blueprint</p>
+					<ul>
+						<li>Django + PostgreSQL backend</li>
+						<li>Celery + Redis background workers</li>
+						<li>Adzuna ingestion and matching engine</li>
+						<li>Admin panel for jobs, applications, and users</li>
+					</ul>
+				</aside>
+			</section>
+		</header>
+
+		<main class="shell main-grid">
+			<section class="panel" id="profile">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">Candidate profile</p>
+						<h2>Capture skills, preferences, and automation rules.</h2>
+					</div>
+					<span class="status-pill">Auto-apply threshold ≥ 85%</span>
+				</div>
+
+				<form class="profile-form" data-profile-form>
+					<label>
+						Headline
+						<input type="text" name="headline" placeholder="Python/Django Automation Engineer" />
+					</label>
+					<label>
+						Location
+						<input type="text" name="location" placeholder="London or Remote" />
+					</label>
+					<label>
+						Years of experience
+						<input type="number" name="experience_years" min="0" value="4" />
+					</label>
+					<label>
+						Skills
+						<input type="text" name="skills" placeholder="python, django, celery, postgresql" />
+					</label>
+					<label>
+						Target roles
+						<input type="text" name="target_roles" placeholder="backend engineer, automation engineer" />
+					</label>
+					<label>
+						Work mode
+						<select name="work_mode">
+							<option>Remote</option>
+							<option>Hybrid</option>
+							<option>On-site</option>
+						</select>
+					</label>
+					<label>
+						Auto-apply threshold
+						<input type="range" name="auto_apply_threshold" min="60" max="100" value="85" />
+					</label>
+					<label class="checkbox-row">
+						<input type="checkbox" name="auto_apply_enabled" checked />
+						Enable automatic applications and confirmation emails
+					</label>
+					<label class="profile-form__wide">
+						Backend API URL
+						<input type="url" data-api-base-input placeholder="http://127.0.0.1:8000/api" />
+					</label>
+					<button type="submit" class="button button--primary">Save profile</button>
+					<p class="inline-note" data-profile-banner>
+						This frontend stores interactions locally until the Django API is running.
+					</p>
+				</form>
+			</section>
+
+			<section class="panel panel--accent" id="swipe">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">Swipe job browser</p>
+						<h2>Review opportunities with fast apply, skip, or save actions.</h2>
+					</div>
+				</div>
+
+				<article class="swipe-card glass" data-swipe-card>
+					<p class="match-chip" data-job-match></p>
+					<h3 data-job-title></h3>
+					<p class="job-meta" data-job-meta></p>
+					<p class="job-description" data-job-description></p>
+					<div class="tag-list" data-job-tags></div>
+				</article>
+
+				<div class="swipe-actions">
+					<button class="button button--ghost" data-swipe-action="skip">Swipe left · Skip</button>
+					<button class="button button--secondary" data-swipe-action="save">Swipe up · Save</button>
+					<button class="button button--primary" data-swipe-action="apply">Swipe right · Apply</button>
+				</div>
+			</section>
+
+			<section class="panel" id="dashboard">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">Application dashboard</p>
+						<h2>Track manual applications, auto-applies, and saved jobs.</h2>
+					</div>
+				</div>
+
+				<div class="stats-grid">
+					<article class="stat-card">
+						<span>Jobs applied for</span>
+						<strong data-stat-applied>0</strong>
+					</article>
+					<article class="stat-card">
+						<span>Auto-applied jobs</span>
+						<strong data-stat-auto>0</strong>
+					</article>
+					<article class="stat-card">
+						<span>Saved jobs</span>
+						<strong data-stat-saved>0</strong>
+					</article>
+				</div>
+
+				<article class="activity-card glass">
+					<h3>Latest activity</h3>
+					<ul data-activity-list></ul>
+				</article>
+			</section>
+
+			<section class="panel panel--subtle">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">Admin and automation</p>
+						<h2>What the backend already supports in this scaffold.</h2>
+					</div>
+				</div>
+				<div class="feature-grid">
+					<article>
+						<h3>CV parsing</h3>
+						<p>Upload a CV, extract text, infer skills, and persist a structured profile.</p>
+					</article>
+					<article>
+						<h3>Matching engine</h3>
+						<p>Score live jobs against profile signals and automation preferences.</p>
+					</article>
+					<article>
+						<h3>Job ingestion</h3>
+						<p>Fetch Adzuna listings asynchronously with fallback sample jobs for local work.</p>
+					</article>
+					<article>
+						<h3>Admin tools</h3>
+						<p>Manage users, jobs, applications, saved jobs, and swipe activity in Django admin.</p>
+					</article>
+				</div>
+			</section>
+		</main>
+
+		<script src="assets/app.js"></script>
+	</body>
+</html>
