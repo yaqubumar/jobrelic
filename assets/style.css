@@ -82,8 +82,8 @@ select {
 }
 
 .brand__logo {
-	width: 42px;
-	height: 42px;
+	width: 28px;
+	height: 28px;
 	object-fit: contain;
 }
 
@@ -291,6 +291,15 @@ h2 {
 	min-height: 260px;
 	background: radial-gradient(circle at top right, rgba(98, 208, 255, 0.12), transparent 30%),
 		rgba(10, 20, 39, 0.86);
+	cursor: grab;
+	user-select: none;
+	touch-action: none;
+	position: relative;
+	transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+
+.swipe-card.dragging {
+	transition: none;
 }
 
 .swipe-card.is-empty {

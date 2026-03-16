@@ -1,3 +1,53 @@
+let swipeState = {
+  startX: 0,
+  startY: 0,
+  currentX: 0,
+  currentY: 0,
+  isDragging: false,
+};
+
+function getSwipeDirection(deltaX) {
+  if (Math.abs(deltaX) < 30) return null;
+  return deltaX > 0 ? "apply" : "skip";
+}
+
+function handleSwipeStart(e) {
+  if (state.jobs.length === 0) return;
+  swipeState.startX = e.touches ? e.touches[0].clientX : e.clientX;
+  swipeState.startY = e.touches ? e.touches[0].clientY : e.clientY;
+  swipeState.isDragging = true;
+  elements.swipeCard.classList.add("dragging");
+}
+
+function handleSwipeMove(e) {
+  if (!swipeState.isDragging || state.jobs.length === 0) return;
+  swipeState.currentX = e.touches ? e.touches[0].clientX : e.clientX;
+  swipeState.currentY = e.touches ? e.touches[0].clientY : e.clientY;
+
+  const deltaX = swipeState.currentX - swipeState.startX;
+  const deltaY = swipeState.currentY - swipeState.startY;
+  const angle = (deltaX / 100) * 15;
+
+  elements.swipeCard.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) rotate(${angle}deg)`;
+  elements.swipeCard.style.opacity = 1 - Math.abs(deltaX) / 400;
+}
+
+function handleSwipeEnd(e) {
+  if (!swipeState.isDragging || state.jobs.length === 0) return;
+  swipeState.isDragging = false;
+  elements.swipeCard.classList.remove("dragging");
+
+  const deltaX = swipeState.currentX - swipeState.startX;
+  const direction = getSwipeDirection(deltaX);
+
+  elements.swipeCard.style.transform = "";
+  elements.swipeCard.style.opacity = "";
+
+  if (direction) {
+    postSwipe(direction);
+  }
+}
+
 const apiBaseUrl = window.localStorage.getItem("jobrelicApiBase") || "http://127.0.0.1:8000/api";
 
 const demoJobs = [
@@ -167,6 +217,13 @@ function init() {
   document.querySelectorAll("[data-swipe-action]").forEach((button) => {
     button.addEventListener("click", () => postSwipe(button.dataset.swipeAction));
   });
+
+  elements.swipeCard.addEventListener("mousedown", handleSwipeStart);
+  elements.swipeCard.addEventListener("touchstart", handleSwipeStart);
+  document.addEventListener("mousemove", handleSwipeMove);
+  document.addEventListener("touchmove", handleSwipeMove, { passive: false });
+  document.addEventListener("mouseup", handleSwipeEnd);
+  document.addEventListener("touchend", handleSwipeEnd);
 
   elements.profileForm.addEventListener("submit", handleProfileSave);
   elements.apiInput.value = apiBaseUrl;
